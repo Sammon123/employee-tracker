@@ -18,8 +18,34 @@ const connection = mysql.createConnection({
 connection.connect((err) => {
     if (err)
         throw err;
+    start();
 })
 
-// Use inquirer to interact with the user via the command-line.
+function start() {
+    // Use inquirer to interact with the user via the command-line.
+    inquirer
+        .prompt({
+            name: 'postOrBid',
+            type: 'list',
+            message: 'Would you like to [POST] an auction or [BID] on an auction?',
+            choices: ['POST', 'BID', 'EXIT'],
+        })
+        .then(function (answer) {
+            // based on their answer, either call the bid or the post functions
+            if (answer.postOrBid === 'POST') {
+                postAuction();
+            } else if (answer.postOrBid === 'BID') {
+                bidAuction();
+            } else {
+                connection.end();
+            }
+        });
+    // prompt the user for what they want to do
+    // -- then when you get the responses
+    // -- query the database
+    // -- when the response comes back
+    // -- display it console.table(response); 
+
+}
 
 // Use console.table to print mysql rows to the console
